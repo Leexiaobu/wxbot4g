@@ -15,7 +15,6 @@ func textMessageHandle(ctx *openwechat.MessageContext) {
 		senderInGroup, _ := ctx.SenderInGroup()
 		senderUser = fmt.Sprintf("%v[%v]", senderInGroup.NickName, senderUser)
 	}
-
 	logger.Log.Infof("[收到新文字消息] == 发信人：%v ==> 内容：%v", senderUser, ctx.Content)
 	//if !ctx.IsSendBySelf() {
 	//	sender, _ := ctx.Sender()
