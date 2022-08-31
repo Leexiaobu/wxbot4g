@@ -1,3 +1,10 @@
+log:
+  level: info
+  file_name: ./logs/wxbot4g.log
+  max_size: 2
+  max_backups: 30
+  max_age: 30
+  compress: false
 redis:
   host: 192.168.31.192
   port: 16379

@@ -1,10 +1,9 @@
 package config
 
 import (
+	"fmt"
 	"gopkg.in/yaml.v3"
-	"log"
 	"os"
-	"wxbot4g/logger"
 )
 
 type config struct {
@@ -12,6 +11,7 @@ type config struct {
 	MySQLConfig mysqlConfig `yaml:"mysql"`
 	OssConfig   ossConfig   `yaml:"oss"`
 	ApiConfig   apiConfig   `yaml:"api"`
+	LogConfig   logConfig   `yaml:"log"`
 }
 
 var Config = &config{}
@@ -19,11 +19,11 @@ var Config = &config{}
 func init() {
 	file, err := os.ReadFile("conf.yaml")
 	if err != nil {
-		log.Fatal("fail to read file:", err)
+		fmt.Println("fail to read file:", err)
 	}
 	err = yaml.Unmarshal(file, &Config)
 	if err != nil {
-		logger.Log.Errorln("error init config,%s", err.Error())
+		fmt.Println("error init config,", err.Error())
 	}
 }
 
@@ -65,4 +65,12 @@ type weatherConfig struct {
 	Url      string `yaml:"url"`
 	Location string `yaml:"location"`
 	Key      string `yaml:"key"`
+}
+type logConfig struct {
+	Level      string `yaml:"level"`
+	FileName   string `yaml:"file_name"`
+	MaxSize    int    `yaml:"max_size"`
+	MaxBackups int    `yaml:"max_backups"`
+	MaxAge     int    `yaml:"max_age"`
+	Compress   bool   `yaml:"compress"`
 }
