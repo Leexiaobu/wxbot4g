@@ -1,0 +1,30 @@
+redis:
+  host: 192.168.31.192
+  port: 16379
+  password:
+  dbname: 0
+oss:
+  endpoint: 192.168.31.192:19000
+  access_key_id: leexiaobu
+  secret_access_key: MINIOdmm21~
+  bucket_name: wechat
+  use_ssl: false
+mysql:
+  host: 192.168.31.192
+  port: 13306
+  username: root
+  password: root
+  dbname: wxbot4g
+api:
+  xiaoai:
+    url: https://xiaobapi.top/api/xb/api/xiaoai.php?msg=%s&type=text
+  image.url: https://api.oick.cn/random/api.php
+  shadiao:
+    url: http://jandan.net/
+  weather:
+    #    location: 北京,101010100#成都,101270101#呼和浩特,101080101#宁波,101210401#西安,101110101#嘉善,101210302
+    location: 北京,101010100#成都,101270101#呼和浩特,101080101#宁波,101210401#嘉善,101210302#哈尔滨,101050101
+    url: https://devapi.qweather.com/v7/%s/now?location=%s&key=%s
+    key: 18e72c22fb58460f99d22267b7a54b7b
+  url: 12321421aa
+

@@ -4,30 +4,28 @@ import (
 	"gopkg.in/yaml.v3"
 	"log"
 	"os"
+	"wxbot4g/logger"
 )
 
 type config struct {
 	RedisConfig redisConfig `yaml:"redis"`
 	MySQLConfig mysqlConfig `yaml:"mysql"`
 	OssConfig   ossConfig   `yaml:"oss"`
+	ApiConfig   apiConfig   `yaml:"api"`
 }
 
 var Config = &config{}
 
 func init() {
-	file, err := os.ReadFile("conf.yml")
+	file, err := os.ReadFile("conf.yaml")
 	if err != nil {
 		log.Fatal("fail to read file:", err)
 	}
 	err = yaml.Unmarshal(file, &Config)
+	if err != nil {
+		logger.Log.Errorln("error init config,%s", err.Error())
+	}
 }
-
-//// RedisConfig Redis配置
-//var (
-//	RedisConfig redisConfig
-//	MySQLConfig mysqlConfig
-//	OssConfig   ossConfig
-//)
 
 // Redis配置
 type redisConfig struct {
@@ -54,53 +52,17 @@ type ossConfig struct {
 	BucketName      string `yaml:"bucket_name"`       // 桶名称
 	UseSsl          bool   `yaml:"use_ssl"`           // 是否使用SSL
 }
+type apiConfig struct {
+	XiaoAiConfig  xiaoaiConfig  `yaml:"xiaoai"`
+	WeatherConfig weatherConfig `yaml:"weather"`
+	Url           string        `yaml:"url"`
+}
 
-// InitRedisConfig 初始化Redis配置
-//func InitRedisConfig() {
-//	// RedisHost Redis主机
-//	host := utils.GetEnvVal("REDIS_HOST", "192.168.31.192")
-//	// RedisPort Redis端口
-//	port := utils.GetEnvVal("REDIS_PORT", "6379")
-//	// RedisPassword Redis密码
-//	password := utils.GetEnvVal("REDIS_PWD", "")
-//	// Redis库
-//	db := utils.GetEnvIntVal("REDIS_DB", 0)
-//
-//	RedisConfig = redisConfig{
-//		Host:     host,
-//		Port:     port,
-//		Password: password,
-//		Db:       db,
-//	}
-//}
-//func InitMysqlConfig() {
-//	host := utils.GetEnvVal("MYSQL_HOST", "192.168.31.192")
-//	port := utils.GetEnvVal("MYSQL_PORT", "3306")
-//	password := utils.GetEnvVal("MYSQL_PWD", "root")
-//	user := utils.GetEnvVal("MSYQL_USER", "root")
-//	db := utils.GetEnvVal("MYSQL_DB", "wxbot4g")
-//	MySQLConfig = mysqlConfig{
-//		Host:     host,
-//		Port:     port,
-//		Username: user,
-//		Password: password,
-//		DbName:   db,
-//	}
-//}
-//
-//// InitOssConfig 初始化OSS配置
-//func InitOssConfig() {
-//	endpoint := utils.GetEnvVal("OSS_ENDPOINT", "192.168.31.192:9001")
-//	accessKeyID := utils.GetEnvVal("OSS_KEY", "leexiaobu")
-//	secretAccessKey := utils.GetEnvVal("OSS_SECRET", "MINIOdmm21~")
-//	bucketName := utils.GetEnvVal("OSS_BUCKET", "wechat")
-//	useSSL := utils.GetEnvBoolVal("OSS_SSL", false)
-//
-//	OssConfig = ossConfig{
-//		Endpoint:        endpoint,
-//		AccessKeyID:     accessKeyID,
-//		SecretAccessKey: secretAccessKey,
-//		BucketName:      bucketName,
-//		UseSsl:          useSSL,
-//	}
-//}
+type xiaoaiConfig struct {
+	Url string `yaml:"url"`
+}
+type weatherConfig struct {
+	Url      string `yaml:"url"`
+	Location string `yaml:"location"`
+	Key      string `yaml:"key"`
+}
