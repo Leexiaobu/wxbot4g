@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/eatmoreapple/openwechat"
 	"strconv"
+	"strings"
 	"time"
 	"wxbot4g/db"
 )
@@ -15,7 +16,6 @@ func checkNeedSave(message *openwechat.Message) bool {
 
 func saveToDb(ctx *openwechat.MessageContext) {
 	// TODO 需要解析成支持的结构体
-
 	slew, _ := ctx.Bot.GetCurrentUser()
 	sender, _ := ctx.Sender()
 	senderUser := sender.NickName
@@ -27,7 +27,10 @@ func saveToDb(ctx *openwechat.MessageContext) {
 		groupName = sender.NickName
 	}
 	msgStr, _ := json.Marshal(ctx)
-
+	command := 0
+	if strings.HasPrefix(ctx.Content, "#") {
+		command = 1
+	}
 	msg := Message{
 		Uin:          strconv.FormatInt(slew.Uin, 10),
 		MsgID:        ctx.MsgId,
@@ -36,6 +39,7 @@ func saveToDb(ctx *openwechat.MessageContext) {
 		SendUserName: senderUser,
 		GroupName:    groupName,
 		Read:         0,
+		Command:      int8(command),
 		BaseStr:      string(msgStr),
 		DataTime:     time.Now().In(time.FixedZone("CST", 8*3600)).Format("2006-01-02 15:04:05"),
 	}
@@ -52,6 +56,7 @@ type Message struct {
 	SendUserName string `json:"send_user_name" gorm:"column:send_user_name"`
 	GroupName    string `json:"group_name" gorm:"column:group_name"`
 	Read         int8   `json:"read" gorm:"column:read"`
+	Command      int8   `json:"command" gorm:"column:command"`
 	BaseStr      string `json:"base_str" gorm:"column:base_str"`
 	DataTime     string `json:"data_time" gorm:"column:data_time"`
 }
