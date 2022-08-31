@@ -112,7 +112,8 @@ func appMessageHandle(ctx *openwechat.MessageContext) {
 			reader2 := ioutil.NopCloser(bytes.NewReader(imgFileByte))
 			flag := oss.SaveToOss(reader2, contentType, fileName)
 			if flag {
-				fileUrl := fmt.Sprintf("https://%v/%v/%v", config.Config.OssConfig.Endpoint, config.Config.OssConfig.BucketName, fileName)
+				//fileUrl := fmt.Sprintf("https://%v/%v/%v", config.Config.OssConfig.Endpoint, config.Config.OssConfig.BucketName, fileName)
+				fileUrl := fmt.Sprintf(config.Config.OssConfig.Endpoint, config.Config.OssConfig.BucketName, fileName)
 				logger.Log.Infof("文件保存成功，文件链接: %v", fileUrl)
 				ctx.Content = fileUrl
 			} else {

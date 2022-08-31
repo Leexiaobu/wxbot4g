@@ -17,6 +17,6 @@ func (h *XiaoAiHandler) Do(ctx *openwechat.MessageContext) (bool, error) {
 	//requestUrl := fmt.Sprintf(xiaoaiconf.Url, txt)
 	//fmt.Println(requestUrl)
 	//result := getStringResult(requestUrl)
-	ctx.ReplyText("小爱也知道怎么回答")
+	ctx.ReplyText("小爱也不知道怎么回答")
 	return true, nil
 }
