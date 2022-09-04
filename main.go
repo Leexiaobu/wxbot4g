@@ -22,7 +22,8 @@ func main() {
 	// 定时更新 Bot 的热登录数据
 	robot.UpdateHotLoginData()
 	// 保活
-	robot.KeepAliveHandle()
+	//关闭保活
+	//robot.KeepAliveHandle()
 
 	var wg sync.WaitGroup
 	wg.Add(1)
