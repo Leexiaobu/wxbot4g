@@ -13,7 +13,7 @@ import (
 var MysqlCon mysqlCon
 
 type mysqlCon struct {
-	client *gorm.DB
+	Client *gorm.DB
 }
 
 func InitMysqlCon() {
@@ -30,14 +30,14 @@ func InitMysqlCon() {
 	} else {
 		logger.Log.Info("mysql init success")
 		MysqlCon = mysqlCon{
-			client: db,
+			Client: db,
 		}
 	}
 }
 func (m *mysqlCon) Save(data interface{}) bool {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel() // 在调用WithTimeout之后defer cancel()
-	err := MysqlCon.client.Create(data).WithContext(ctx).Error
+	err := MysqlCon.Client.Create(data).WithContext(ctx).Error
 
 	if err != nil {
 		logger.Log.Errorf("保存数据到数据库失败: %v", err.Error())
