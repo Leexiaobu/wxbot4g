@@ -50,8 +50,7 @@ func CheckBot(appKey string) error {
 
 // InitWechatBotHandle 初始化微信机器人
 func InitWechatBotHandle() *protocol.WechatBot {
-	//bot := openwechat.DefaultBot(openwechat.Desktop)
-	bot := openwechat.DefaultBot()
+	bot := openwechat.DefaultBot(openwechat.Desktop)
 	bot.UUIDCallback = openwechat.PrintlnQrcodeUrl
 	//bot.UUIDCallback = ConsoleQrCode
 	// 定义读取消息错误回调函数
