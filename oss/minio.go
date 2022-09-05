@@ -11,8 +11,7 @@ import (
 
 var minioClient *minio.Client
 
-// InitOssConnHandle 初始化OSS连接
-func InitOssConnHandle() {
+func init() {
 	ctx := context.Background()
 	// 初始化OSS配置
 	//config.InitOssConfig()

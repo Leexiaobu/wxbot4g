@@ -15,8 +15,7 @@ type redisConn struct {
 
 var RedisClient redisConn
 
-// InitRedisConnHandle 初始化Redis连接对象
-func InitRedisConnHandle() {
+func init() {
 	// 读取配置
 	//InitRedisConfig()
 	// 初始化连接
@@ -42,7 +41,6 @@ func InitRedisConnHandle() {
 		}
 	}
 
-	//defer c.Close()
 }
 
 // GetData 获取数据

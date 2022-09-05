@@ -12,8 +12,7 @@ import (
 // Log 日志工具
 var Log *zap.SugaredLogger
 
-// InitLogger 初始化日志工具
-func InitLogger() {
+func init() {
 	logConfig := config.Config.LogConfig
 	// 配置 sugaredLogger
 	// 自定义时间输出格式

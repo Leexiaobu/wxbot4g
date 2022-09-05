@@ -16,7 +16,7 @@ type mysqlCon struct {
 	Client *gorm.DB
 }
 
-func InitMysqlCon() {
+func init() {
 	logger.Log.Info(fmt.Sprintf("Mysql:%s:%s/%s ", Config.MySQLConfig.Host, Config.MySQLConfig.Port, Config.MySQLConfig.DbName))
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		Config.MySQLConfig.Username,
@@ -34,6 +34,7 @@ func InitMysqlCon() {
 		}
 	}
 }
+
 func (m *mysqlCon) Save(data interface{}) bool {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel() // 在调用WithTimeout之后defer cancel()

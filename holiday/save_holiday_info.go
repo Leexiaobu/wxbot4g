@@ -37,6 +37,19 @@ func updateMonInfo(mon string) {
 	db.MysqlCon.Client.Debug().Create(&dataList)
 }
 
+func updateEnum() {
+	url := "https://api.apihubs.cn/enum/get?type=holiday"
+	response, _ := http.Get(url)
+	body, _ := io.ReadAll(response.Body)
+	var resData HolidayEnum
+	json.Unmarshal(body, &resData)
+	dataList := resData.EnumFiled
+	//for data := range dataList {
+	//	db.MysqlCon.Client.Debug().Create(&data)
+	//}
+	db.MysqlCon.Client.Debug().Table("holiday_enum").Create(&dataList)
+}
+
 type Holiday struct {
 	ID                int    `json:"id" gorm:"column:id"`
 	Year              int    `json:"year" gorm:"column:year"`
@@ -90,4 +103,15 @@ type HolidayResponse struct {
 		Size  int       `json:"size"`
 		Total int       `json:"total"`
 	} `json:"data"`
+}
+type HolidayEnum struct {
+	Code      int         `json:"code"`
+	Msg       string      `json:"msg"`
+	EnumFiled []EnumFiled `json:"data"`
+}
+type EnumFiled struct {
+	ID    int    `json:"id" gorm:"column:id"`
+	Key   string `json:"enum_key"`
+	Value string `json:"value"`
+	Group string `json:"group_name"`
 }
