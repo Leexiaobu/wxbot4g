@@ -14,6 +14,7 @@ var Head = &NullHandler{}
 func init() {
 	Head.
 		SetNext(&WeatherHandle{}).
+		SetNext(&HolidayHandler{}).
 		SetNext(&XiaoAiHandler{})
 }
 func CheckIsApiMsg(message *openwechat.Message) bool {
