@@ -13,8 +13,11 @@ type HolidayHandler struct {
 // Do 校验参数的逻辑
 func (h *HolidayHandler) Do(ctx *openwechat.MessageContext) (bool, error) {
 	if strings.EqualFold(ctx.Content, "#fj") {
-		day := holiday.GetToDay()
+		day, extra := holiday.GetToDay()
 		ctx.ReplyText(day)
+		if extra != "" {
+			ctx.ReplyText(extra)
+		}
 		return true, nil
 	}
 	return false, nil

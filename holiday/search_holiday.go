@@ -11,7 +11,7 @@ import (
 
 var DB = db.MysqlCon.Client
 
-func GetToDay() string {
+func GetToDay() (string, string) {
 	today := time.Now().Format("20060102")
 	todayInt, error := strconv.Atoi(today)
 	var holidayInfo *HolidayInfo
@@ -25,10 +25,10 @@ func GetToDay() string {
 	} else {
 		json.Unmarshal([]byte(data), &holidayInfo)
 	}
-	msg := getReplyMsg(holidayInfo)
-	return msg
+	msg, extra := getReplyMsg(holidayInfo)
+	return msg, extra
 }
-func GetDay(today string) string {
+func GetDay(today string) (string, string) {
 	todayInt, error := strconv.Atoi(today)
 	var holidayInfo *HolidayInfo
 	redisTodayKey := "wechat:holiday:" + today
@@ -41,14 +41,15 @@ func GetDay(today string) string {
 	} else {
 		json.Unmarshal([]byte(data), &holidayInfo)
 	}
-	msg := getReplyMsg(holidayInfo)
-	return msg
+	msg, extra := getReplyMsg(holidayInfo)
+	return msg, extra
 }
-func getReplyMsg(info *HolidayInfo) string {
+func getReplyMsg(info *HolidayInfo) (string, string) {
 	today := info.Today
 	var msgs []HolidayMessage
 	rand.Seed(time.Now().Unix())
 	var reply string
+	var extra string
 	if today.Workday == 1 {
 		//日常上班
 		DB.Table("holiday_message").Where("type=0").Find(&msgs)
@@ -59,13 +60,14 @@ func getReplyMsg(info *HolidayInfo) string {
 			var overMsgs []HolidayMessage
 			DB.Table("holiday_message").Where("type=1").Find(&overMsgs)
 			overMsg := overMsgs[rand.Intn(len(overMsgs))]
-			reply = reply + overMsg.Message
+			extra = overMsg.Message
 		}
+
 	} else {
 		//日常周末
 		DB.Table("holiday_message").Where("type=2").Find(&msgs)
 		msg := msgs[rand.Intn(len(msgs))]
-		reply = fmt.Sprintf(msg.Message, info.NextHoliday.HolidaySpend, info.NextHoliday.HolidayLength)
+		reply = fmt.Sprintf(msg.Message, info.NextHoliday.HolidayLength)
 		if today.Holiday != 10 {
 			holidayEnum := EnumFiled{}
 			DB.Table("holiday_enum").Where("group_name='holiday'").Where("enum_key=?", today.Holiday).Find(&holidayEnum)
@@ -73,10 +75,10 @@ func getReplyMsg(info *HolidayInfo) string {
 			//法定节假日
 			DB.Table("holiday_message").Where("type=3").Where("enum_id=?", holidayEnum.ID).Find(&holidayMsgs)
 			holidayMsg := holidayMsgs[rand.Intn(len(holidayMsgs))]
-			reply = reply + holidayMsg.Message
+			extra = holidayMsg.Message
 		}
 	}
-	return reply
+	return reply, extra
 }
 
 func genTodayInfo(todayInt int) (data *HolidayInfo) {
