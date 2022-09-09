@@ -52,20 +52,20 @@ func getReplyMsg(info *HolidayInfo) (string, string) {
 	var extra string
 	if today.Workday == 1 {
 		//日常上班
-		DB.Table("holiday_message").Where("type=0").Find(&msgs)
+		DB.Table("holiday_message").Where("type=0").Where("enable=0").Find(&msgs)
 		msg := msgs[rand.Intn(len(msgs))]
 		reply = fmt.Sprintf(msg.Message, info.NextHoliday.WorkLength)
 		if today.HolidayOvertime != 10 {
 			//调休
 			var overMsgs []HolidayMessage
-			DB.Table("holiday_message").Where("type=1").Find(&overMsgs)
+			DB.Table("holiday_message").Where("type=1").Where("enable=0").Find(&overMsgs)
 			overMsg := overMsgs[rand.Intn(len(overMsgs))]
 			extra = overMsg.Message
 		}
 
 	} else {
 		//日常周末
-		DB.Table("holiday_message").Where("type=2").Find(&msgs)
+		DB.Table("holiday_message").Where("type=2").Where("enable=0").Find(&msgs)
 		msg := msgs[rand.Intn(len(msgs))]
 		reply = fmt.Sprintf(msg.Message, info.NextHoliday.HolidayLength)
 		if today.Holiday != 10 {
@@ -73,7 +73,7 @@ func getReplyMsg(info *HolidayInfo) (string, string) {
 			DB.Table("holiday_enum").Where("group_name='holiday'").Where("enum_key=?", today.Holiday).Find(&holidayEnum)
 			var holidayMsgs []HolidayMessage
 			//法定节假日
-			DB.Table("holiday_message").Where("type=3").Where("enum_id=?", holidayEnum.ID).Find(&holidayMsgs)
+			DB.Table("holiday_message").Where("type=3").Where("enum_id=?", holidayEnum.ID).Where("enable=0").Find(&holidayMsgs)
 			holidayMsg := holidayMsgs[rand.Intn(len(holidayMsgs))]
 			extra = holidayMsg.Message
 		}
