@@ -9,7 +9,7 @@ import (
 // InitBotWithStart 系统启动的时候从Redis加载登录信息自动登录
 func InitBotWithStart() {
 	logger.Log.Infof("登录管理员账户")
-	key := "wxboot:login:leexiaobu"
+	key := "wechat:login:leexiaobu"
 	// 提取出AppKey
 	appKey := key[13:]
 	// 调用热登录
