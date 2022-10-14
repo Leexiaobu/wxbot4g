@@ -6,22 +6,26 @@ log:
   max_age: 30
   compress: false
 redis:
-  host: 192.168.31.192
+  host: leexiaobu.cn
   port: 16379
   password:
   dbname: 0
 oss:
-  endpoint: 192.168.31.192:19000
+  endpoint: leexiaobu.cn:19000
   access_key_id: leexiaobu
   secret_access_key: MINIOdmm21~
   bucket_name: wechat
   use_ssl: false
 mysql:
-  host: 192.168.31.192
+  host: leexiaobu.cn
   port: 13306
   username: root
   password: root
-  dbname: wxbot4g
+  dbname: wxbot4g_test
+notify:
+  mail_send:
+  mail_rec:
+  code:
 api:
   xiaoai:
     url: https://xiaobapi.top/api/xb/api/xiaoai.php?msg=%s&type=text
@@ -34,4 +38,6 @@ api:
     url: https://devapi.qweather.com/v7/%s/now?location=%s&key=%s
     key: 18e72c22fb58460f99d22267b7a54b7b
   url: 12321421aa
+  holiday:
+    url
 

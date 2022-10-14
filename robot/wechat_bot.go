@@ -12,6 +12,7 @@ import (
 	"wxbot4g/handler"
 	"wxbot4g/logger"
 	"wxbot4g/protocol"
+	"wxbot4g/utils"
 )
 
 var (
@@ -81,6 +82,7 @@ func UpdateHotLoginData() {
 	c := cron.New()
 	// 添加一个每三十分钟执行一次的执行器
 	_ = c.AddFunc("0 0/30 * * * ? ", dealUpdateHotLoginData)
+	c.AddFunc("0 0/10 * * * ? ", checkAlive)
 	// 新启一个协程，运行定时任务
 	go c.Start()
 	// 等待停止信号结束任务
@@ -109,6 +111,15 @@ func dealUpdateHotLoginData() {
 			logger.Log.Infof("【%v】热登录数据更新成功", user.NickName)
 		}
 		continue
+	}
+}
+
+// 检查状态是否正常
+func checkAlive() {
+	for key, bot := range wechatBots {
+		if !bot.Alive() {
+			utils.Notify(key, "用户状态异常")
+		}
 	}
 }
 

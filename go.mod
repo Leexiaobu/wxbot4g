@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/eatmoreapple/openwechat v1.1.14
 	github.com/garyburd/redigo v1.6.3
+	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
 	github.com/minio/minio-go/v7 v7.0.34
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/robfig/cron v1.2.0
