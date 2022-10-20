@@ -14,6 +14,7 @@ var Head = &NullHandler{}
 func init() {
 	Head.
 		SetNext(&WeatherHandle{}).
+		SetNext(&AiPicHandler{}).
 		SetNext(&HolidayHandler{}).
 		SetNext(&XiaoAiHandler{})
 }
@@ -47,9 +48,9 @@ func (n *Next) SetNext(h ApiHandle) ApiHandle {
 // Run 执行
 func (n *Next) Run(ctx *openwechat.MessageContext) (breakHandle bool, err error) {
 	if n.nextHandler != nil {
-		do, err := (n.nextHandler).Do(ctx)
-		if err != nil || do {
-			return do, err
+		isHandled, err := (n.nextHandler).Do(ctx)
+		if err != nil || isHandled {
+			return isHandled, err
 		}
 		return (n.nextHandler).Run(ctx)
 	}
