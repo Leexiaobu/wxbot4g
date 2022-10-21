@@ -46,7 +46,7 @@ func genPicData(msg string) (string, int64) {
 	marshal, _ := json.Marshal(defaultReq)
 	params := string(marshal)
 	logger.Log.Info(params)
-	resp, error := http.Post(url, "application/json", strings.NewReader(params))
+	resp, _ := http.Post(url, "application/json", strings.NewReader(params))
 	body, _ := io.ReadAll(resp.Body)
 	base64Data := strings.Replace(string(body), "event: newImage\nid: 1\ndata:", "", 1)
 	return base64Data, unix
