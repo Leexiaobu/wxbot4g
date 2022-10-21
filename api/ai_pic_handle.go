@@ -17,11 +17,11 @@ type AiPicHandler struct {
 	Next
 }
 
-//var isRun = true
+var isRun = false
 
 // Do 校验参数的逻辑
 func (h *AiPicHandler) Do(ctx *openwechat.MessageContext) (bool, error) {
-	if strings.HasPrefix(ctx.Content, "#hh") {
+	if strings.HasPrefix(ctx.Content, "#hh") && isRun {
 		params := strings.Replace(ctx.Content, "#hh", "", 1)
 		ctx.ReplyText("小爱正在作画中。。预计80s")
 		logger.Log.Info(fmt.Sprintf("作画参数:%s", params))
@@ -46,7 +46,7 @@ func genPicData(msg string) (string, int64) {
 	marshal, _ := json.Marshal(defaultReq)
 	params := string(marshal)
 	logger.Log.Info(params)
-	resp, _ := http.Post(url, "application/json", strings.NewReader(params))
+	resp, error := http.Post(url, "application/json", strings.NewReader(params))
 	body, _ := io.ReadAll(resp.Body)
 	base64Data := strings.Replace(string(body), "event: newImage\nid: 1\ndata:", "", 1)
 	return base64Data, unix
@@ -58,7 +58,7 @@ var defaultReq = &payload{
 	Sampler:  "k_euler_ancestral",
 	Scale:    12,
 	Steps:    28,
-	Uc:       "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurr",
+	Uc:       "lowres, bad anatomy, text, error, worst quality, low quality, normal quality, jpeg artifacts, signature,",
 	UcPreset: 0,
 	Width:    896,
 }
